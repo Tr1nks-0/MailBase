@@ -8,6 +8,10 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
+/**
+ * Точка входа
+ * так же здесь описаны пакеты для поиска {@link org.springframework.stereotype.Component Component}
+ */
 @SpringBootApplication
 @EnableAutoConfiguration
 @ComponentScan({
@@ -18,20 +22,29 @@ public class MainClass extends SpringBootServletInitializer {
     public static final Class[] classes = {MainClass.class};
     public static ApplicationContext ac;
 
+    /**
+     * Точка входа
+     *
+     * @param args аргументы
+     */
     public static void main(String[] args) {
         System.setProperty("spring.devtools.restart.enabled", "true");
         System.setProperty("spring.thymeleaf.cache", "false");
         ac = SpringApplication.run(classes, args);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param builder
+     * @return
+     */
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(MainClass.class);
     }
 }
 /*
-
-
 //    @Bean
 //    public CommandLineRunner commandLineRunner(ApplicationContext context) {
 //        return args -> {

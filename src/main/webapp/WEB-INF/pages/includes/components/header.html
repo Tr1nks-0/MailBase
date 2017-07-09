@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<header th:fragment="normal(pageAdress)">
+    <div class="col-lg-12  col-md-12 ">
+        <div class="col-lg-9 col-md-9">
+            <nav th:replace="/includes/components/navigation :: menu(${pageAdress})"></nav>
+        </div>
+        <div class="col-lg-3 col-md-3">
+            logged as:
+            <br>
+            <a href="#">logout</a><!--fixme-->
+        </div>
+    </div>
+</header>
+</body>
+</html>
+
+
+

@@ -1,0 +1,61 @@
+/*.filterDiv {*/
+/*display: inline-block;*/
+/*border: 1px solid;*/
+/*padding-left: 1%;*/
+/*padding-right: 1%;*/
+/*}*/
+
+/*.filterDiv > div {*/
+/*display: inline-block;*/
+/*}*/
+
+/*.filterDiv > div * {*/
+/*display: block;*/
+/*}*/
+
+.filterMoveButtonsDiv button, label {
+    display: block;
+}
+
+.filterCheckbox {
+    display: inline-block;
+}
+
+.collapse {
+    position: absolute;
+    top: 100%;
+}
+
+.selectedFilterItemsDiv {
+    min-height: 30px;
+    background: black;
+    color: white;
+    padding: 1%;
+    border: solid 2px #8f8f8f;
+}
+
+.selectedFilterItemsDiv > span {
+    display: inline-block;
+    padding: 1% 2%;
+    margin-left: 1%;
+    margin-top: 1%;
+    border: solid 2px #8f8f8f;
+    border-radius: 5px;
+}
+
+#personViewTable {
+    border-collapse: collapse;
+}
+
+#personViewTable th, td {
+    border: solid 2px #8f8f8f;
+}
+
+.errorTd ~ td {
+    background: #6e0500;
+}
+
+#personViewTable input[type=text]{
+    background: rgba(255,255,255,0);
+    border: hidden;
+}

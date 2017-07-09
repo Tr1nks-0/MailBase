@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="normal (pageTitle)">
+    <meta charset="UTF-8"/>
+    <title th:text="${pageTitle} ?: ''">Template Layout Title</title>
+    <style th:replace="/includes/service/cssIncludes :: normal"></style>
+</head>
+<body>
+
+</body>
+</html>

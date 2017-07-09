@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<header>
+    <nav th:fragment="menu(pageAddress)">
+        <ul class="navigationMenu">
+            <li>
+                <span th:if="${#strings.equals(pageAddress,'/main')}"><span class="glyphicon glyphicon-home"></span>Главная</span>
+                <a href="/main" th:unless="${#strings.equals(pageAddress,'/main')}"> <span class="glyphicon glyphicon-home"></span>Главная</a>
+            </li>
+            <li>
+                <span th:if="${#strings.equals(pageAddress,'/upload')}"> <span class="glyphicon glyphicon-arrow-up"></span>Загрузить</span>
+                <a href="/upload" th:unless="${#strings.equals(pageAddress,'/upload')}"><span class="glyphicon glyphicon-arrow-up"></span>Загрузить</a>
+            </li>
+            <li>
+                <span th:if="${#strings.equals(pageAddress,'/students')}"> <span class="glyphicon "></span>Студенты</span>
+                <a href="/students" th:unless="${#strings.equals(pageAddress,'/students')}"><span class="glyphicon "></span>Студенты</a>
+            </li>
+            <li>
+                <span th:if="${#strings.equals(pageAddress,'/teachers')}"> <span class="glyphicon "></span>Преподаватели</span>
+                <a href="/teacherEntities" th:unless="${#strings.equals(pageAddress,'/teachers')}"><span class="glyphicon "></span>Преподаватели</a>
+            </li>
+            <li>
+                <span th:if="${#strings.equals(pageAddress,'/download')}"><span class="glyphicon glyphicon-download-alt"></span>Скачать</span>
+                <a href="/download" th:unless="${#strings.equals(pageAddress,'/download')}"><span class="glyphicon glyphicon-download-alt"></span>Скачать</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+</body>
+</html>

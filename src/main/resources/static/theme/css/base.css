@@ -1,0 +1,42 @@
+header ul.navigationMenu {
+    list-style: none;
+    text-align: left;
+}
+
+header ul.navigationMenu li {
+    display: inline
+}
+
+header ul.navigationMenu li a {
+    display: inline-block;
+    padding: 10px 15px;
+    border-left: 1px solid #ccc;
+    /*color: #7cf700;*/
+    /*text-shadow: red 1px 0px, red 1px 1px, red 0px 1px, red -1px 1px, red -1px 0px, red -1px -1px, red 0px -1px, red 1px -1px, red 0 0 3px, red 0 0 3px, red 0 0 3px, red 0 0 3px, red 0 0 3px, red 0 0 3px, red 0 0 3px, red 0 0 3px;*/
+}
+
+header ul.navigationMenu li > span {
+    display: inline-block;
+    padding: 10px 15px;
+    border-left: 1px solid #ccc;
+    text-decoration: underline;
+    /*color: #7cf700;*/
+    /*text-shadow: red 1px 0px, red 1px 1px, red 0px 1px, red -1px 1px, red -1px 0px, red -1px -1px, red 0px -1px, red 1px -1px, red 0 0 3px, red 0 0 3px, red 0 0 3px, red 0 0 3px, red 0 0 3px, red 0 0 3px, red 0 0 3px, red 0 0 3px;*/
+}
+
+header ul.navigationMenu li a:hover {
+    /*color: #27f796;*/
+}
+
+body {
+    color: white;
+    background: url("/theme/img/dark_wood.png") repeat; /*tested it works!!!*/
+}
+
+select {
+    background: black;
+}
+
+button {
+    background: #1f1f1f;
+}

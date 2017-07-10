@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="includes/service/head :: normal(pageTitle='Upload')">
+    <meta charset="UTF-8">
+</head>
+<body>
+<header th:replace="includes/components/header :: normal (pageAdress='/upload')"></header>
+<div id="center">
+    <!--/*@thymesVar id="uploadPD" type="com.tr1nks.model.pagedatas.UploadPageData"*/-->
+    <div th:unless="${uploadPD}">
+        <div>
+            <a th:href="@{/upload/sample/student}">Student sample</a>
+            <a th:href="@{/upload/sample/teacher}">Teacher sample</a>
+        </div>
+        <!--/*@thymesVar id="file" type="org.springframework.web.multipart.MultipartFile"*/-->
+        <form th:action="@{/upload/file}" method="post" th:object="${file}" enctype="multipart/form-data" class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+            <div class="col-lg-5  col-md-5">
+                <label for="fileInput">Файл для загрузки:</label>
+                <input id="fileInput" class="form-control " type="file" name="file" required/>
+            </div>
+            <button type="submit" class="btn-success">Отправить</button>
+        </form>
+    </div>
+    <div th:if="${uploadPD}" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+        <form th:action="@{/upload/test}" method="post" th:object="${uploadPD}">
+            <input type="hidden" th:field="*{filename}"/>
+            <div class="col-lg-12  col-md-12">
+                <span class="col-lg-3  col-md-3 ">
+                    <label for="codepage">Кодировка файла:</label>
+                    <select th:field="*{codepage}" class="form-control" name="codepage" id="codepage">
+                        <option th:each="enumItem : ${T(com.tr1nks.model.pagedatas.pdenums.CodePagesEnum).valuesW()}"
+                                th:value="${enumItem}"
+                                th:text="${enumItem.value}"></option>
+                    </select>
+                </span>
+                <span class="col-lg-3  col-md-3 ">
+                    <label for="delimiter">Разделитель полей файла:</label>
+                    <select th:field="*{delimiter}" class="form-control" name="delimiter" id="delimiter">
+                        <option th:each="enumItem : ${T(com.tr1nks.model.pagedatas.pdenums.CodePagesEnum).valuesW()}"
+                                th:value="${enumItem}"
+                                th:text="${enumItem.value}"></option>
+                    </select>
+                </span>
+                <span class="col-lg-3  col-md-3 ">
+                    <label for="person">Файл содержит данные для:</label>
+                    <select th:field="*{person}" class="form-control" name="person" id="person">
+                         <option th:each="enumItem : ${T(com.tr1nks.model.pagedatas.pdenums.PersonEnum).valuesW()}"
+                                 th:value="${enumItem}"
+                                 th:text="${enumItem.value}"></option>
+                    </select>
+                </span>
+            </div>
+            <button type="submit" class="btn-md btn-success">Перегрузить</button>
+        </form>
+        <form th:action="@{/upload/process}" method="post" th:object="${uploadPD}">
+            <div class="col-lg-12  col-md-12">
+                <input type="hidden" th:field="*{codepage}"/>
+                <input type="hidden" th:field="*{delimiter}"/>
+                <input type="hidden" th:field="*{person}"/>
+                <input type="hidden" th:field="*{filename}"/>
+                <table>
+                    <tbody>
+                    <tr th:each="row : *{fileStrings}">
+                        <td th:each="cell,index : ${row}" th:text="${cell}">
+                            <span th:text="${index.index}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td th:each="maskItem,maskIterator : *{mask}">
+                            <label>
+                                <select th:field="*{mask[__${maskIterator.index}__]}" class="form-control">
+                                    <option th:each="enumItem : ${T(com.tr1nks.model.pagedatas.pdenums.UploadFileMaskEnum).valuesW()}"
+                                            th:value="${enumItem}" th:text="${enumItem.value}"></option>
+                                </select>
+                            </label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn-md btn-primary">Отправить</button>
+        </form>
+    </div>
+</div>
+<footer></footer>
+</body>
+</html>

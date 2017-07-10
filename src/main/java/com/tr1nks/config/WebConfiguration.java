@@ -24,14 +24,17 @@ public class WebConfiguration implements WebMvcConfigurer {
     private ApplicationContext applicationContext;
 
     /**
-     * {@inheritDoc}
+     * template view resolver для thymeleaf
      *
-     * @param registry
+     * @return template view resolver
      */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/theme/**").addResourceLocations("classpath:/static/theme/");
-        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
+    @Bean
+    public ViewResolver thymeleafViewResolver() {
+        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+        viewResolver.setTemplateEngine(templateEngine());
+        viewResolver.setOrder(1);
+        viewResolver.setCharacterEncoding(ENCODING);
+        return viewResolver;
     }
 
     /**
@@ -69,17 +72,14 @@ public class WebConfiguration implements WebMvcConfigurer {
     }
 
     /**
-     * template view resolver для thymeleaf
+     * {@inheritDoc}
      *
-     * @return template view resolver
+     * @param registry
      */
-    @Bean
-    public ViewResolver thymeleafViewResolver() {
-        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
-        viewResolver.setTemplateEngine(templateEngine());
-        viewResolver.setOrder(1);
-        viewResolver.setCharacterEncoding(ENCODING);
-        return viewResolver;
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/theme/**").addResourceLocations("classpath:/static/theme/");
+        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
     }
 
 

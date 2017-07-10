@@ -3,6 +3,11 @@ package com.tr1nks.model;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.jms.JndiConnectionFactoryAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +24,7 @@ import org.springframework.context.annotation.ComponentScan;
         "com.tr1nks.controller"
 })
 public class MainClass extends SpringBootServletInitializer {
-    public static final Class[] classes = {MainClass.class};
+    public static final Class[] classes = {MainClass.class,};
     public static ApplicationContext ac;
 
     /**
@@ -41,7 +46,7 @@ public class MainClass extends SpringBootServletInitializer {
      */
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(MainClass.class);
+        return builder.sources(classes);
     }
 }
 /*

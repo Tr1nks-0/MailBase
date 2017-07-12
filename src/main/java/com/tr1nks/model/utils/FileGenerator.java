@@ -56,8 +56,11 @@ public class FileGenerator {
     public static final String PDF_RESOURCE_LOCATION = "/static/pdf/";
     private static final Pattern PDF_EMAIL_ADRESS_PATTERN = Pattern.compile("@@EMAIL-ADDRESS");
     private static final Pattern PDF_EMAIL_PASSWORD_PATTERN = Pattern.compile("@@EMAIL-PASSWORD");
-    private static final Pattern PDF_SECTION_CONNECTOR = Pattern.compile("@@SECTION_CONNECTOR");
     private PdfFromHtmlCreator creator = new PdfFromHtmlCreator();
+    private HtmlCssForPdfData pdfDataFull = creator.loadHtmlCssData("pdfSample_Full.html");
+    private HtmlCssForPdfData pdfDataImagine = creator.loadHtmlCssData("pdfSample_Imagine.html");
+    private HtmlCssForPdfData pdfDataOffice = creator.loadHtmlCssData("pdfSample_Office.html");
+    private HtmlCssForPdfData pdfDataEmailOnly = creator.loadHtmlCssData("pdfSample_EmailOnly.html");
 //    private static final String
 
     /**
@@ -71,6 +74,18 @@ public class FileGenerator {
         HashMap<Pattern, String> replaceMap = new HashMap<>();
         replaceMap.put(PDF_EMAIL_ADRESS_PATTERN, person.getLogin() + domensService.getEmailDomen());
         replaceMap.put(PDF_EMAIL_PASSWORD_PATTERN, person.getInitPassw());
-        return creator.create(creator.loadHtmlCssData("pdfSample.html"), replaceMap);
+        if (person.getImagine() && person.getOffice()) {
+            return creator.create(pdfDataFull, replaceMap);
+        } else {
+            if (person.getImagine()) {
+                return creator.create(pdfDataImagine, replaceMap);
+            } else if (person.getOffice()) {
+                return creator.create(pdfDataOffice, replaceMap);
+            } else {
+                return creator.create(pdfDataEmailOnly, replaceMap);
+            }
+        }
     }
+
+
 }

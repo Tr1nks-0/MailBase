@@ -2,15 +2,14 @@ package com.tr1nks.controller;
 
 import com.tr1nks.model.engines.StudentEngine;
 import com.tr1nks.model.pagedatas.StudentPageData;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * контроллер страницы студенты
@@ -101,27 +100,14 @@ public class StudentController {
 
     @PostMapping(path = "/pdf")
     public void getPDFArchives(@ModelAttribute(MODEL_NAME) StudentPageData studentPD, HttpServletResponse response) {
-//        try (OutputStream outputStream = response.getOutputStream()) {
-        try{
+        try (OutputStream outputStream = response.getOutputStream()) {
             response.setContentType("application/zip");
-            byte[]arr=studentEngine.createPDFArchive(studentPD);
-//            outputStream.write(arr);
-            IOUtils.copy(new ByteArrayInputStream(arr),response.getOutputStream());
+            byte[] arr = studentEngine.createPDFArchive(studentPD);
+            outputStream.write(arr);
             response.flushBuffer();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //        try (OutputStreamWriter writer = new OutputStreamWriter(response.getOutputStream())) {
-//
-//            writer.write();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        try (){
-//            studentEngine.createPDF(studentPD, response.getOutputStream());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return new ModelAndView(VIEW_NAME, MODEL_NAME, studentPD);
+//        return new ModelAndView(VIEW_NAME, MODEL_NAME, studentPD);//fixme
     }
 }

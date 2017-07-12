@@ -56,7 +56,9 @@ public class FileGenerator {
     public static final String PDF_RESOURCE_LOCATION = "/static/pdf/";
     private static final Pattern PDF_EMAIL_ADRESS_PATTERN = Pattern.compile("@@EMAIL-ADDRESS");
     private static final Pattern PDF_EMAIL_PASSWORD_PATTERN = Pattern.compile("@@EMAIL-PASSWORD");
+    private static final Pattern PDF_SECTION_CONNECTOR = Pattern.compile("@@SECTION_CONNECTOR");
     private PdfFromHtmlCreator creator = new PdfFromHtmlCreator();
+//    private static final String
 
     /**
      * создать PDF

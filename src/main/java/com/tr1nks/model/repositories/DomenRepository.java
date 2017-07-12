@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DomenRepository extends JpaRepository<DomensEntity, Integer> {
-//    @Query(value = "SELECT * FROM domens LIMIT 1", nativeQuery = true)
-//    DomensEntity getFirst();
+    DomensEntity findFirstById(Integer id);
+
 }

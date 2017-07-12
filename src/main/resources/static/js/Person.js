@@ -40,9 +40,12 @@ function checkChecked(tableId, selectId) {
     var v = document.getElementById(tableId).rows;
     console.log('sss');
 }
-function sendFormAction(formId, action) {
+function sendFormAction(formId, actionStr) {
     var form = document.getElementById(formId);
-    form.action += "/" + action;
+    if (!actionStr.startsWith("/")) {
+        actionStr = "/" + actionStr;
+    }
+    form.action += actionStr;
     form.submit();
 }
 /**

@@ -5,11 +5,13 @@ import com.tr1nks.model.pagedatas.StudentPageData;
 import com.tr1nks.model.services.FacultyService;
 import com.tr1nks.model.services.GroupService;
 import com.tr1nks.model.services.StudentService;
+import com.tr1nks.model.utils.FileGenerator;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * обработчик для контроллера {@link com.tr1nks.controller.StudentController StudentController}
@@ -22,6 +24,8 @@ public class StudentEngine {
     private GroupService groupService;
     @Resource
     private FacultyService facultyService;
+    @Resource
+    private FileGenerator fileGenerator;
 
     /**
      * обработчик get действия
@@ -109,5 +113,11 @@ public class StudentEngine {
      */
     public void sendData(StudentPageData studentPD) {
 
+    }
+
+
+    public byte[] createPDFArchive(StudentPageData studentPD) {
+        List st = studentService.getAllByCode(studentPD.getSelectedStudents());
+      return   fileGenerator.createPDFArchiveBytes(st);
     }
 }

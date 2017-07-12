@@ -1,14 +1,17 @@
 package com.tr1nks.model.utils;
 
-import com.tr1nks.model.entities.*;
+import com.tr1nks.model.entities.PersonEntity;
+import com.tr1nks.model.entities.StudentEntity;
+import com.tr1nks.model.entities.TeacherEntity;
+import com.tr1nks.model.services.DomensService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -19,89 +22,53 @@ import java.util.zip.ZipOutputStream;
 public class FileGenerator {
     private static final String SLH = "/";
     @Resource
-    PdfGenerator pdfGenerator;
+    private DomensService domensService;
 
-    /**
-     *
-     * @param outputStream
-     * @param facultyEntityMap
-     */
-    public void writePDFArchive(OutputStream outputStream, HashMap<FacultyEntity, HashMap<Object, ArrayList<PersonEntity>>> facultyEntityMap) {
-        try (ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream)) {
-            HashMap<Object, ArrayList<PersonEntity>> arrayListHashMap;
-            ArrayList<PersonEntity> arr;
-            for (FacultyEntity faculty : facultyEntityMap.keySet()) {
-                arrayListHashMap = facultyEntityMap.get(faculty);
-                for (Object groupOrCathedra : arrayListHashMap.keySet()) {
-                    arr = arrayListHashMap.get(groupOrCathedra);
-                    for (PersonEntity person : arr) {
-                        if (groupOrCathedra instanceof GroupEntity) {
-                            zipOutputStream.putNextEntry(new ZipEntry(faculty.getAbbr() + SLH + ((GroupEntity) groupOrCathedra).getChiper() + SLH + person.getSurname() + "_" + person.getName()));
-                        } else if (groupOrCathedra instanceof CathedraEntity) {
-                            zipOutputStream.putNextEntry(new ZipEntry(faculty.getAbbr() + SLH + ((CathedraEntity) groupOrCathedra).getAbbr() + SLH + person.getSurname() + "_" + person.getName()));
-                        }
-
-                        zipOutputStream.write(pdfGenerator.create(person));//запись PDF todo
-                    }
+    public byte[] createPDFArchiveBytes(List<PersonEntity> persons) {
+        byte[] arr = null;
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
+            StringBuilder builder = new StringBuilder();
+            for (PersonEntity person : persons) {
+                if (person instanceof StudentEntity) {
+                    builder.append(((StudentEntity) person).getGroup().getFaculty().getAbbr())
+                            .append(SLH).append(((StudentEntity) person).getGroup().getChiper())
+                            .append(SLH);
+                } else if (person instanceof TeacherEntity) {
+                    builder.append(((TeacherEntity) person).getCathedra().getFaculty())
+                            .append(SLH).append(((TeacherEntity) person).getCathedra().getAbbr())
+                            .append(SLH);
                 }
+                builder.append(person.getSurname()).append("_").append(person.getName()).append(".pdf");
+                zipOutputStream.putNextEntry(new ZipEntry(builder.toString()));
+                HashMap<Pattern, String> replaceMap = new HashMap<>();
+                zipOutputStream.write(create(person));
+                zipOutputStream.closeEntry();
+                builder.replace(0, builder.length(), "");
             }
+            arr = byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return arr;
     }
 
-    /**
-     *
-     * @param studentEntityList
-     * @return
-     */
-    //фио группа логин пароль, группировка в папки по группам
-    public HashMap<FacultyEntity, HashMap<GroupEntity, ArrayList<StudentEntity>>> sortStudentsForPDF(List<StudentEntity> studentEntityList) {
-        HashMap<FacultyEntity, HashMap<GroupEntity, ArrayList<StudentEntity>>> facultyMap = new HashMap<>();
-        HashMap<GroupEntity, ArrayList<StudentEntity>> groupMap;
-        ArrayList<StudentEntity> students;
-        for (StudentEntity student : studentEntityList) {
-            if (facultyMap.containsKey(student.getGroup().getFaculty())) {
-                groupMap = facultyMap.get(student.getGroup().getFaculty());
-            } else {
-                groupMap = new HashMap<>();
-                facultyMap.put(student.getGroup().getFaculty(), groupMap);
-            }
-            if (groupMap.containsKey(student.getGroup())) {
-                students = groupMap.get(student.getGroup());
-            } else {
-                students = new ArrayList<>();
-                students = groupMap.put(student.getGroup(), students);
-            }
-            students.add(student);
-        }
-        return facultyMap;
-    }
+
+    public static final String PDF_RESOURCE_LOCATION = "/static/pdf/";
+    private static final Pattern PDF_EMAIL_ADRESS_PATTERN = Pattern.compile("@@EMAIL-ADDRESS");
+    private static final Pattern PDF_EMAIL_PASSWORD_PATTERN = Pattern.compile("@@EMAIL-PASSWORD");
+    private PdfFromHtmlCreator creator = new PdfFromHtmlCreator();
 
     /**
+     * создать PDF
+     * подготавливает данные для работы {@link PdfFromHtmlCreator PdfFromHtmlCreator}
      *
-     * @param teacherEntityList
-     * @return
+     * @param person персона для которой создается pdf
+     * @return pdf в виде массива байт
      */
-    public HashMap<FacultyEntity, HashMap<CathedraEntity, ArrayList<TeacherEntity>>> sortTeacherForPDF(List<TeacherEntity> teacherEntityList) {
-        HashMap<FacultyEntity, HashMap<CathedraEntity, ArrayList<TeacherEntity>>> facultyMap = new HashMap<>();
-        HashMap<CathedraEntity, ArrayList<TeacherEntity>> groupMap;
-        ArrayList<TeacherEntity> teachers;
-        for (TeacherEntity teacher : teacherEntityList) {
-            if (facultyMap.containsKey(teacher.getCathedra().getFaculty())) {
-                groupMap = facultyMap.get(teacher.getCathedra().getFaculty());
-            } else {
-                groupMap = new HashMap<>();
-                facultyMap.put(teacher.getCathedra().getFaculty(), groupMap);
-            }
-            if (groupMap.containsKey(teacher.getCathedra())) {
-                teachers = groupMap.get(teacher.getCathedra());
-            } else {
-                teachers = new ArrayList<>();
-                teachers = groupMap.put(teacher.getCathedra(), teachers);
-            }
-            teachers.add(teacher);
-        }
-        return facultyMap;
+    public byte[] create(PersonEntity person) {
+        HashMap<Pattern, String> replaceMap = new HashMap<>();
+        replaceMap.put(PDF_EMAIL_ADRESS_PATTERN, person.getLogin() + domensService.getEmailDomen());
+        replaceMap.put(PDF_EMAIL_PASSWORD_PATTERN, person.getInitPassw());
+        return creator.create(creator.loadHtmlCssData("pdfSample.html"), replaceMap);
     }
 }

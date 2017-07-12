@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 /**
  * {@link JpaRepository JpaRepository} для {@link StudentEntity StudentEntity}
  */
@@ -33,4 +34,5 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Integer>
     @Query(value = "SELECT * FROM student s WHERE s.group_id = (SELECT g.id FROM group_ g WHERE g.year= :yr)", nativeQuery = true)
     List<StudentEntity> getAllByYear(@Param("yr") Integer year);
 
+    List<StudentEntity> findAllById(List<Integer> ids);
 }

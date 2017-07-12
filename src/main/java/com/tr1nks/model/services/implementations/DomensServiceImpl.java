@@ -21,8 +21,7 @@ public class DomensServiceImpl implements DomensService {
      */
     @Override
     public String getEmailDomen() {
-//        return domensRepository.getFirst().get;
-        return null;
+        return domensRepository.findFirstById(1).getEmailDomen();
     }
 
     /**
@@ -32,7 +31,7 @@ public class DomensServiceImpl implements DomensService {
      */
     @Override
     public String getImagineDomen() {
-        return null;
+        return domensRepository.findFirstById(1).getImagineDomen();
     }
 
     /**
@@ -42,6 +41,6 @@ public class DomensServiceImpl implements DomensService {
      */
     @Override
     public String getOfficeDomen() {
-        return null;
+        return domensRepository.findFirstById(1).getOfficeDomen();
     }
 }

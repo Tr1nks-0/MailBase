@@ -103,4 +103,6 @@ public interface StudentService {
      * @return студенты факультета
      */
     List<StudentEntity> getStudentsByYear(Integer integer);
+
+    List<StudentEntity> getAllByCode(List<Integer> selectedStudents);
 }

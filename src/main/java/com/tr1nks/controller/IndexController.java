@@ -37,7 +37,7 @@ public class IndexController {
 
 
 //    @PostMapping({"/","/main"})
-//    public String create(@RequestParam(getText = "name") String name) {
+//    public String createPdfBytes(@RequestParam(getText = "name") String name) {
 //        reviewRepository.add(name);
 //        return "redirect:/";
 //    }

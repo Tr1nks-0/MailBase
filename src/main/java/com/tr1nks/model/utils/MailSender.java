@@ -67,6 +67,7 @@ public class MailSender {
             for (File f : attachments) {
                 if (null != f) {
                     DataSource source = new FileDataSource(f);
+//                    DataSource source2 = new FileDataSource(f);
                     attachmentBodyPart.setDataHandler(new DataHandler(source));
                     attachmentBodyPart.setFileName(MimeUtility.encodeText(source.getName(), "UTF-8", "UTF-8"));
                     //      attachmentBodyPart.setFileName(MimeUtility.encodeText(source.getName()));

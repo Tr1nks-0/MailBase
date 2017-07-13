@@ -7,8 +7,7 @@ import com.tr1nks.model.services.DomensService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -20,10 +19,25 @@ import java.util.zip.ZipOutputStream;
  */
 @Component
 public class FileGenerator {
+    public static final String PDF_RESOURCE_LOCATION = "/static/pdf/";
+    private static final Pattern PDF_EMAIL_ADRESS_PATTERN = Pattern.compile("@@EMAIL-ADDRESS");
+    private static final Pattern PDF_EMAIL_PASSWORD_PATTERN = Pattern.compile("@@EMAIL-PASSWORD");
     private static final String SLH = "/";
+    private static final String EMAIL_CSV_TAIL = ",,,,,,,,,,,,";
     @Resource
     private DomensService domensService;
+    private PdfFromHtmlCreator creator = new PdfFromHtmlCreator();
+    private HtmlCssForPdfData pdfDataFull = creator.loadHtmlCssData("pdfSample_Full.html");
+    private HtmlCssForPdfData pdfDataImagine = creator.loadHtmlCssData("pdfSample_Imagine.html");
+    private HtmlCssForPdfData pdfDataOffice = creator.loadHtmlCssData("pdfSample_Office.html");
+    private HtmlCssForPdfData pdfDataEmailOnly = creator.loadHtmlCssData("pdfSample_EmailOnly.html");
 
+    /**
+     * Создать архив с pdf и csv в со структурой директорий
+     *
+     * @param persons персоны для которых необходимо сгенерировать данные
+     * @return массив байт архива с пдф
+     */
     public byte[] createPDFArchiveBytes(List<PersonEntity> persons) {
         byte[] arr = null;
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
@@ -31,20 +45,23 @@ public class FileGenerator {
             for (PersonEntity person : persons) {
                 if (person instanceof StudentEntity) {
                     builder.append(((StudentEntity) person).getGroup().getFaculty().getAbbr())
-                            .append(SLH).append(((StudentEntity) person).getGroup().getChiper())
+                            .append(SLH).append(((StudentEntity) person).getGroup().getChiper().replace(".", "_"))
                             .append(SLH);
                 } else if (person instanceof TeacherEntity) {
-                    builder.append(((TeacherEntity) person).getCathedra().getFaculty())
+                    builder.append(((TeacherEntity) person).getCathedra().getFaculty().getAbbr())
                             .append(SLH).append(((TeacherEntity) person).getCathedra().getAbbr())
                             .append(SLH);
                 }
                 builder.append(person.getSurname()).append("_").append(person.getName()).append(".pdf");
+                System.out.println(builder.toString());
                 zipOutputStream.putNextEntry(new ZipEntry(builder.toString()));
                 HashMap<Pattern, String> replaceMap = new HashMap<>();
-                zipOutputStream.write(create(person));
+                zipOutputStream.write(createPdfBytes(person));
                 zipOutputStream.closeEntry();
                 builder.replace(0, builder.length(), "");
             }
+            writeCsvToArchive(persons, zipOutputStream);
+            zipOutputStream.flush();
             arr = byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,16 +69,69 @@ public class FileGenerator {
         return arr;
     }
 
+    /**
+     * Дописать csv в архив с pdf
+     *
+     * @param persons         персоны архива
+     * @param zipOutputStream выходной поток архива
+     */
+    private void writeCsvToArchive(List<PersonEntity> persons, ZipOutputStream zipOutputStream) {
+        HashMap<String, StringBuilder> map = new HashMap<>();
+        for (PersonEntity person : persons) {
+            String name = null;
+            if (person instanceof StudentEntity) {
+                StudentEntity s = (StudentEntity) person;
+                name = s.getGroup().getFaculty().getAbbr() + SLH + s.getGroup().getChiper().replace(".", "_") + ".csv";
+            } else if (person instanceof TeacherEntity) {
+                TeacherEntity t = (TeacherEntity) person;
+                name = t.getCathedra().getFaculty().getAbbr() + SLH + t.getCathedra().getAbbr() + ".csv";
+            }
+            if (null != name && map.containsKey(name)) {
+                map.get(name).append(createEmailCsvString(person));
+            } else {
+                map.put(name, new StringBuilder(createEmailCsvString(person)));
+            }
+        }
+        for (String name : map.keySet()) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(zipOutputStream, "cp1251"))) {
+                zipOutputStream.putNextEntry(new ZipEntry(name));
+                zipOutputStream.write(map.get(name).toString().getBytes("cp1251"));
+                zipOutputStream.closeEntry();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println();
+    }
 
-    public static final String PDF_RESOURCE_LOCATION = "/static/pdf/";
-    private static final Pattern PDF_EMAIL_ADRESS_PATTERN = Pattern.compile("@@EMAIL-ADDRESS");
-    private static final Pattern PDF_EMAIL_PASSWORD_PATTERN = Pattern.compile("@@EMAIL-PASSWORD");
-    private PdfFromHtmlCreator creator = new PdfFromHtmlCreator();
-    private HtmlCssForPdfData pdfDataFull = creator.loadHtmlCssData("pdfSample_Full.html");
-    private HtmlCssForPdfData pdfDataImagine = creator.loadHtmlCssData("pdfSample_Imagine.html");
-    private HtmlCssForPdfData pdfDataOffice = creator.loadHtmlCssData("pdfSample_Office.html");
-    private HtmlCssForPdfData pdfDataEmailOnly = creator.loadHtmlCssData("pdfSample_EmailOnly.html");
-//    private static final String
+    /**
+     * создать строку для файла csv email
+     *
+     * @param person персона
+     * @return строка файла csv
+     */
+    private String createEmailCsvString(PersonEntity person) {
+        return person.getName() + ',' + person.getSurname() + ',' + person.getLogin() + domensService.getEmailDomen() + ',' + person.getInitPassw() + EMAIL_CSV_TAIL + "\n";
+    }
+
+    /**
+     * Получить csv строку со всеми данными для email
+     *
+     * @param persons персоны
+     * @return строка данных
+     */
+    public byte[] createFullPersonsEmailCsv(List<PersonEntity> persons) {
+        StringBuilder builder = new StringBuilder();
+        for (PersonEntity person : persons) {
+            builder.append(createEmailCsvString(person));
+        }
+        try {
+            return builder.toString().getBytes("cp1251");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     /**
      * создать PDF
@@ -70,7 +140,7 @@ public class FileGenerator {
      * @param person персона для которой создается pdf
      * @return pdf в виде массива байт
      */
-    public byte[] create(PersonEntity person) {
+    public byte[] createPdfBytes(PersonEntity person) {
         HashMap<Pattern, String> replaceMap = new HashMap<>();
         replaceMap.put(PDF_EMAIL_ADRESS_PATTERN, person.getLogin() + domensService.getEmailDomen());
         replaceMap.put(PDF_EMAIL_PASSWORD_PATTERN, person.getInitPassw());
@@ -86,6 +156,4 @@ public class FileGenerator {
             }
         }
     }
-
-
 }

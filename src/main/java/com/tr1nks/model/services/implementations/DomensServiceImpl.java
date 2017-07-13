@@ -13,6 +13,9 @@ import javax.annotation.Resource;
 public class DomensServiceImpl implements DomensService {
     @Resource
     private DomenRepository domensRepository;
+    private static String emailDomen;
+    private static String imagineDomen;
+    private static String officeDomen;
 
     /**
      * {@inheritDoc}
@@ -21,7 +24,10 @@ public class DomensServiceImpl implements DomensService {
      */
     @Override
     public String getEmailDomen() {
-        return domensRepository.findFirstById(1).getEmailDomen();
+        if (null == emailDomen) {
+            emailDomen = domensRepository.findFirstById(1).getEmailDomen();
+        }
+        return emailDomen;
     }
 
     /**
@@ -31,7 +37,10 @@ public class DomensServiceImpl implements DomensService {
      */
     @Override
     public String getImagineDomen() {
-        return domensRepository.findFirstById(1).getImagineDomen();
+        if (null == imagineDomen) {
+            imagineDomen = domensRepository.findFirstById(1).getImagineDomen();
+        }
+        return imagineDomen;
     }
 
     /**
@@ -41,6 +50,9 @@ public class DomensServiceImpl implements DomensService {
      */
     @Override
     public String getOfficeDomen() {
-        return domensRepository.findFirstById(1).getOfficeDomen();
+        if (null == officeDomen) {
+            officeDomen = domensRepository.findFirstById(1).getOfficeDomen();
+        }
+        return officeDomen;
     }
 }

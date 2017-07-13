@@ -24,6 +24,9 @@ public class FileGenerator {
     private static final Pattern PDF_EMAIL_PASSWORD_PATTERN = Pattern.compile("@@EMAIL-PASSWORD");
     private static final String SLH = "/";
     private static final String EMAIL_CSV_TAIL = ",,,,,,,,,,,,";
+    private static final String OFFICE_CSV_TAIL = ",,,,,,,,,,";
+
+
     @Resource
     private DomensService domensService;
     private PdfFromHtmlCreator creator = new PdfFromHtmlCreator();
@@ -114,24 +117,64 @@ public class FileGenerator {
         return person.getName() + ',' + person.getSurname() + ',' + person.getLogin() + domensService.getEmailDomen() + ',' + person.getInitPassw() + EMAIL_CSV_TAIL + "\n";
     }
 
+
     /**
-     * Получить csv строку со всеми данными для email
+     * создать строку для файла csv imagine
+     *
+     * @param person персона
+     * @return строка файла csv
+     */
+    private String createImagineCsvString(PersonEntity person) {
+        return person.getLogin() + domensService.getImagineDomen() + "\n";
+    }
+
+    /**
+     * создать строку для файла csv office
+     *
+     * @param person персона
+     * @return строка файла csv
+     */
+    private String createOfficeCsvString(PersonEntity person) {
+        return person.getLogin() + domensService.getImagineDomen() + ',' + person.getName() + ',' + person.getSurname() + ',' + person.getName() + ',' + person.getSurname() + OFFICE_CSV_TAIL + "\n";
+    }
+
+    /**
+     * Получить массив байт csv файлов
+     * arr[0][] - массив байт файла csv email
+     * arr[1][] - массив байт файла csv Imagine
+     * arr[2][] - массив байт файла csv Office
      *
      * @param persons персоны
-     * @return строка данных
+     * @return массив байт csv файлов
      */
-    public byte[] createFullPersonsEmailCsv(List<PersonEntity> persons) {
-        StringBuilder builder = new StringBuilder();
+    public byte[][] createFullPersonsCsvs(List<PersonEntity> persons) {
+        byte[][] arr = new byte[3][];
+        StringBuilder builderEmail = new StringBuilder();
+        StringBuilder builderImagine = new StringBuilder();
+        StringBuilder builderOffice = new StringBuilder();
         for (PersonEntity person : persons) {
-            builder.append(createEmailCsvString(person));
+            builderEmail.append(createEmailCsvString(person));
+            if (person.getImagine()) {
+                builderImagine.append(createImagineCsvString(person));
+            }
+            if (person.getOffice()) {
+                builderOffice.append(createOfficeCsvString(person));
+            }
         }
         try {
-            return builder.toString().getBytes("cp1251");
+            arr[0] = builderEmail.toString().getBytes("cp1251");
+            if (builderImagine.length() > 0) {
+                arr[1] = builderEmail.toString().getBytes();
+            }
+            if (builderOffice.length() > 0) {
+                arr[2] = builderOffice.toString().getBytes();
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            return null;
         }
+        return arr;
     }
+
 
     /**
      * создать PDF

@@ -6,6 +6,7 @@ import com.tr1nks.model.services.FacultyService;
 import com.tr1nks.model.services.GroupService;
 import com.tr1nks.model.services.StudentService;
 import com.tr1nks.model.utils.FileGenerator;
+import com.tr1nks.model.utils.MailSender;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -26,6 +27,8 @@ public class StudentEngine {
     private FacultyService facultyService;
     @Resource
     private FileGenerator fileGenerator;
+    @Resource
+    private MailSender mailSender;
 
     /**
      * обработчик get действия
@@ -112,12 +115,18 @@ public class StudentEngine {
      * @param studentPD данные страницы
      */
     public void sendData(StudentPageData studentPD) {
-
+        List st = studentService.getAllByCode(studentPD.getSelectedStudents());
+        mailSender.sendTLSMailPropFileText(fileGenerator.createFullPersonsCsvs(st));
     }
 
-
+    /**
+     * создать zip архив pdf
+     *
+     * @param studentPD студенты для создания архива
+     * @return массив байт архива
+     */
     public byte[] createPDFArchive(StudentPageData studentPD) {
         List st = studentService.getAllByCode(studentPD.getSelectedStudents());
-      return   fileGenerator.createPDFArchiveBytes(st);
+        return fileGenerator.createPDFArchiveBytes(st);
     }
 }

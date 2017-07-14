@@ -23,10 +23,10 @@
                 <span th:if="${#strings.equals(pageAddress,'/teachers')}"> <span class="glyphicon "></span>Преподаватели</span>
                 <a href="/teacherEntities" th:unless="${#strings.equals(pageAddress,'/teachers')}"><span class="glyphicon "></span>Преподаватели</a>
             </li>
-            <li>
-                <span th:if="${#strings.equals(pageAddress,'/download')}"><span class="glyphicon glyphicon-download-alt"></span>Скачать</span>
-                <a href="/download" th:unless="${#strings.equals(pageAddress,'/download')}"><span class="glyphicon glyphicon-download-alt"></span>Скачать</a>
-            </li>
+            <!--<li>-->
+                <!--<span th:if="${#strings.equals(pageAddress,'/download')}"><span class="glyphicon glyphicon-download-alt"></span>Скачать</span>-->
+                <!--<a href="/download" th:unless="${#strings.equals(pageAddress,'/download')}"><span class="glyphicon glyphicon-download-alt"></span>Скачать</a>-->
+            <!--</li>-->
         </ul>
     </nav>
 </header>

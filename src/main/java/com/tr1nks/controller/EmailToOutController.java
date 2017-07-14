@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
  * контроллер получения адресов почты снаружи другили приложениями
  */
 @RestController
-@RequestMapping({"/EmailToOutController"})
+@RequestMapping({"/emailToOutController"})
 public class EmailToOutController {
     //    private static final String VIEW_NAME = "upload";
 

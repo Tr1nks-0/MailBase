@@ -29,22 +29,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(HttpSecurity security) throws Exception {
-//        security.authorizeRequests().anyRequest().permitAll();//todo fixme
         security.authorizeRequests()
-//                .antMatchers("/main").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
                 .antMatchers("/main").access(HAS_ANY_ROLE + SiteRoles.ROLE_ADMIN.getRole() + COMMA + SiteRoles.ROLE_USER.getRole() + TAIL)
                 .antMatchers("/upload").access(HAS_ANY_ROLE + SiteRoles.ROLE_ADMIN.getRole() + COMMA + SiteRoles.ROLE_USER.getRole() + TAIL)
                 .antMatchers("/students").access(HAS_ANY_ROLE + SiteRoles.ROLE_ADMIN.getRole() + COMMA + SiteRoles.ROLE_USER.getRole() + TAIL)
                 .antMatchers("/teachers").access(HAS_ANY_ROLE + SiteRoles.ROLE_ADMIN.getRole() + COMMA + SiteRoles.ROLE_USER.getRole() + TAIL)
 //                .antMatchers("/index").permitAll()
-                .and().formLogin().loginPage("/index").defaultSuccessUrl("/main", false).failureUrl("/index?error=true").and()
-                .logout().logoutSuccessUrl("/index").and()
-                .csrf().disable();
-//        security.authorizeRequests()
-//                .antMatchers("/**").access(HAS_ROLE + SiteRoles.ROLE_ADMIN.getRole() + TAIL).and()
-//                .formLogin().loginPage("/index").defaultSuccessUrl("/main", true).failureUrl("/index?error=true").and()
-//                .logout().logoutSuccessUrl("/index").and()
-//                .csrf().disable();
+                .and().formLogin().loginPage("/index").defaultSuccessUrl("/main", false).failureUrl("/index?error=true")
+                .and().logout().logoutSuccessUrl("/index")
+                .and().csrf().disable();
     }
 
     @Override

@@ -135,15 +135,25 @@ public class MailSender {
             //для всех фалов добавляем их как части письма (будут видны как вложение)
             int i = 0;
             for (byte[] arr : attachmentsBytes) {
-                if (null != arr) {
+                if (null != arr) {//todo Исправить отправку файло - отправляются файлы с последним именем и одинаковые
                     DataSource source = new ByteArrayDataSource(arr, "text/csv");
                     attachmentBodyPart.setDataHandler(new DataHandler(source));
-                    attachmentBodyPart.setFileName(MimeUtility.encodeText(filenames[i], "UTF-8", "UTF-8"));
+                    attachmentBodyPart.setFileName(MimeUtility.encodeText("filenames[i]"+i, "UTF-8", "UTF-8"));
 //                    attachmentBodyPart.setFileName(MimeUtility.encodeText(source.getName()));
                     multipart.addBodyPart(attachmentBodyPart);
                 }
                 i++;
             }
+            /*for (File f : attachments) {
+                if (null != f) {
+                    DataSource source = new FileDataSource(f);
+                    attachmentBodyPart.setDataHandler(new DataHandler(source));
+                    attachmentBodyPart.setFileName(MimeUtility.encodeText(source.getName(), "UTF-8", "UTF-8"));
+                    //      attachmentBodyPart.setFileName(MimeUtility.encodeText(source.getName()));
+                    multipart.addBodyPart(attachmentBodyPart);
+                }
+            }
+            message.setContent(multipart);*/
             message.setContent(multipart);
             //Отправляем сообщение
             Transport.send(message);

@@ -33,10 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity security) throws Exception {
         security.authorizeRequests()
-                .antMatchers("/main").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
-                .antMatchers("/upload").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
-                .antMatchers("/students").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
-                .antMatchers("/teachers").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
+                .antMatchers("/main/**").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
+                .antMatchers("/upload/**").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
+                .antMatchers("/students/**").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
+                .antMatchers("/teachers/**").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
 //                .antMatchers("/index").permitAll()
                 .and().formLogin().loginPage("/index").defaultSuccessUrl("/main", false).failureUrl("/index?error=true")
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/index")

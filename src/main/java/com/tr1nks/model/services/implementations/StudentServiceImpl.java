@@ -1,6 +1,5 @@
 package com.tr1nks.model.services.implementations;
 
-import com.tr1nks.model.engines.StudentEngine;
 import com.tr1nks.model.entities.StudentEntity;
 import com.tr1nks.model.repositories.StudentRepository;
 import com.tr1nks.model.services.StudentService;
@@ -155,6 +154,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentEntity> getAllByCode(List<Integer> selectedStudents) {
-        return studentRepository.findAllById(selectedStudents);
+        return studentRepository.findAllByIdIn(selectedStudents);
     }
 }

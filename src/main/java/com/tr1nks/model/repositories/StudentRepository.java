@@ -34,5 +34,6 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Integer>
     @Query(value = "SELECT * FROM student s WHERE s.group_id = (SELECT g.id FROM group_ g WHERE g.year= :yr)", nativeQuery = true)
     List<StudentEntity> getAllByYear(@Param("yr") Integer year);
 
-    List<StudentEntity> findAllById(List<Integer> ids);
+//    List<StudentEntity> findAllById(List<Integer> id);
+    List<StudentEntity> findAllByIdIn(List<Integer> id);
 }

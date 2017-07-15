@@ -131,29 +131,18 @@ public class MailSender {
             messageBodyPart.setContent(text, "text/plain; charset=UTF-8");
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart);
-            MimeBodyPart attachmentBodyPart = new MimeBodyPart();
+//            MimeBodyPart attachmentBodyPart = new MimeBodyPart();
             //для всех фалов добавляем их как части письма (будут видны как вложение)
-            int i = 0;
-            for (byte[] arr : attachmentsBytes) {
-                if (null != arr) {//todo Исправить отправку файло - отправляются файлы с последним именем и одинаковые
-                    DataSource source = new ByteArrayDataSource(arr, "text/csv");
-                    attachmentBodyPart.setDataHandler(new DataHandler(source));
+//            int i = 0;
+            for (int i = 0; i < 3; i++) {
+                System.out.println(attachmentsBytes[i]);
+                if (null != attachmentsBytes[i]) {
+                    MimeBodyPart attachmentBodyPart = new MimeBodyPart();
+                    attachmentBodyPart.setDataHandler(new DataHandler(new ByteArrayDataSource(attachmentsBytes[i], "text/csv")));
                     attachmentBodyPart.setFileName(MimeUtility.encodeText(filenames[i], "UTF-8", "UTF-8"));
-//                    attachmentBodyPart.setFileName(MimeUtility.encodeText(source.getName()));
-                    multipart.addBodyPart(attachmentBodyPart);
-                }
-                i++;
-            }
-            /*for (File f : attachments) {
-                if (null != f) {
-                    DataSource source = new FileDataSource(f);
-                    attachmentBodyPart.setDataHandler(new DataHandler(source));
-                    attachmentBodyPart.setFileName(MimeUtility.encodeText(source.getName(), "UTF-8", "UTF-8"));
-                    //      attachmentBodyPart.setFileName(MimeUtility.encodeText(source.getName()));
                     multipart.addBodyPart(attachmentBodyPart);
                 }
             }
-            message.setContent(multipart);*/
             message.setContent(multipart);
             //Отправляем сообщение
             Transport.send(message);

@@ -164,7 +164,7 @@ public class FileGenerator {
         try {
             arr[0] = builderEmail.toString().getBytes("cp1251");
             if (builderImagine.length() > 0) {
-                arr[1] = builderEmail.toString().getBytes();
+                arr[1] = builderImagine.toString().getBytes();
             }
             if (builderOffice.length() > 0) {
                 arr[2] = builderOffice.toString().getBytes();

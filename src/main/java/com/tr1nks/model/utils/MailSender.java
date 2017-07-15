@@ -99,12 +99,16 @@ public class MailSender {
         }
     }
 
-    public void sendTLSMailPropFileText(byte[][] attachmentsBytes) {
-        sendTLSBytes(environment.getProperty(EMAIL_SUBJECT_KEY), replaceInText(environment.getProperty(EMAIL_TEXT_KEY)), attachmentsBytes, new String[]{"gmail.csv", "Imagine.csv", "office.csv"});
+    public void sendTLSMailPropFileText(byte[][] attachmentsBytes, String userLogin) {
+        sendTLSBytes(environment.getProperty(EMAIL_SUBJECT_KEY), replaceInText(environment.getProperty(EMAIL_TEXT_KEY), userLogin), attachmentsBytes, new String[]{"gmail.csv", "Imagine.csv", "office.csv"});
     }
 
     public String replaceInText(String inText) {
         return SEND_USER_PATTERN.matcher(NOW_DATETIME_PATTERN.matcher(inText).replaceAll(new SimpleDateFormat("dd MMMM YYYY : H:mm:ss", MY_DATE_FORMAT_SYMBOLS).format(new Date()))).replaceAll("");//todo get a USER login
+    }
+
+    public String replaceInText(String inText, String userLogin) {
+        return SEND_USER_PATTERN.matcher(NOW_DATETIME_PATTERN.matcher(inText).replaceAll(new SimpleDateFormat("dd MMMM YYYY : H:mm:ss", MY_DATE_FORMAT_SYMBOLS).format(new Date()))).replaceAll(userLogin);
     }
 
     public void sendTLSBytes(String subject, String text, byte[][] attachmentsBytes, String[] filenames) {

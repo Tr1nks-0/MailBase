@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
 /**
  * Security config
  * права доступа
@@ -30,13 +33,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity security) throws Exception {
         security.authorizeRequests()
-                .antMatchers("/main").access(HAS_ANY_ROLE + SiteRoles.ROLE_ADMIN.getRole() + COMMA + SiteRoles.ROLE_USER.getRole() + TAIL)
-                .antMatchers("/upload").access(HAS_ANY_ROLE + SiteRoles.ROLE_ADMIN.getRole() + COMMA + SiteRoles.ROLE_USER.getRole() + TAIL)
-                .antMatchers("/students").access(HAS_ANY_ROLE + SiteRoles.ROLE_ADMIN.getRole() + COMMA + SiteRoles.ROLE_USER.getRole() + TAIL)
-                .antMatchers("/teachers").access(HAS_ANY_ROLE + SiteRoles.ROLE_ADMIN.getRole() + COMMA + SiteRoles.ROLE_USER.getRole() + TAIL)
+                .antMatchers("/main").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
+                .antMatchers("/upload").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
+                .antMatchers("/students").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
+                .antMatchers("/teachers").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
 //                .antMatchers("/index").permitAll()
                 .and().formLogin().loginPage("/index").defaultSuccessUrl("/main", false).failureUrl("/index?error=true")
-                .and().logout().logoutSuccessUrl("/index")
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/index")
                 .and().csrf().disable();
     }
 
@@ -46,16 +49,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        web.ignoring().antMatchers("/theme", "theme");
     }
 
+    //    @Qualifier("dataSource")
+//    @Autowired
+    @Resource
+    DataSource dataSource;
+//    @Value("${spring.queries.users-query}")
+//    private String usersQuery;
+//
+//    @Value("${spring.queries.roles-query}")
+//    private String rolesQuery;
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {//todo in db auth
-        builder.inMemoryAuthentication().withUser("user").password("user").roles(SiteRoles.ROLE_USER.getRoleNoPrefix());
-        builder.inMemoryAuthentication().withUser("admin").password("admin").roles(SiteRoles.ROLE_ADMIN.getRoleNoPrefix(), SiteRoles.ROLE_USER.getRoleNoPrefix());
+//        builder.inMemoryAuthentication().withUser("user").password("user").roles(SiteRoles.USER.getRole());
+//        builder.inMemoryAuthentication().withUser("admin").password("admin").roles(SiteRoles.ADMIN.getRole());
+//        builder.inMemoryAuthentication().withUser("root").password("root").roles(SiteRoles.ADMIN.getRole(), SiteRoles.USER.getRole());
+        builder.jdbcAuthentication().dataSource(dataSource)
+                .usersByUsernameQuery("select login, password,TRUE  from user where login=?")
+                .authoritiesByUsernameQuery("SELECT login, concat('ROLE_',role) FROM  user WHERE login=?");
     }
     /*http.authorizeRequests()А
                 .antMatchers('/management/**')
-                    .access("hasRole('ROLE_ADMIN')")
+                    .access("hasRole('ADMIN')")
                 .antMatchers('/account/**')
-                    .access("hasAnyRole('ROLE_STUDENT', 'ROLE_ADMIN')")
+                    .access("hasAnyRole('ROLE_STUDENT', 'ADMIN')")
                 .and()
                     .formLogin()
                         .loginPage('/login')
@@ -75,15 +92,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity security) throws Exception {
         security.addFilterAfter(new EncodingFilter(), BasicAuthenticationFilter.class);
         String hasRole = "hasRole('", end = "')", pageend = "/**";
-        //.access(hasRole + SiteRoles.ROLE_USER + end)
+        //.access(hasRole + SiteRoles.USER + end)
         security.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/" + PageNames.INDEX).permitAll().defaultSuccessUrl("/" + PageNames.MAIN, true)
                 .and().authorizeRequests()
                 .antMatchers("theme").permitAll()
-                .antMatchers(PageNames.MAIN, PageNames.MAIN_SLH).access(SiteRoles.ROLE_USER)
-                .antMatchers(PageNames.UPLOAD, PageNames.UPLOAD_SLH).access(SiteRoles.ROLE_USER)
-                .antMatchers(PageNames.STUDENT, PageNames.STUDENT_SLH).access(SiteRoles.ROLE_USER)
-                .antMatchers(PageNames.TEACHER, PageNames.TEACHER_SLH).access(SiteRoles.ROLE_USER)
-                .antMatchers(PageNames.DOWNLOAD, PageNames.DOWNLOAD_SLH).access(SiteRoles.ROLE_USER)
+                .antMatchers(PageNames.MAIN, PageNames.MAIN_SLH).access(SiteRoles.USER)
+                .antMatchers(PageNames.UPLOAD, PageNames.UPLOAD_SLH).access(SiteRoles.USER)
+                .antMatchers(PageNames.STUDENT, PageNames.STUDENT_SLH).access(SiteRoles.USER)
+                .antMatchers(PageNames.TEACHER, PageNames.TEACHER_SLH).access(SiteRoles.USER)
+                .antMatchers(PageNames.DOWNLOAD, PageNames.DOWNLOAD_SLH).access(SiteRoles.USER)
                 .and().csrf().disable();
     }
 

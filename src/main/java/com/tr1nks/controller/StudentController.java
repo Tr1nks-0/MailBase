@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.security.Principal;
 
 /**
  * контроллер страницы студенты
@@ -63,7 +64,7 @@ public class StudentController {
      * @return имя представления и данные страницы с соотв. изменениями если они были
      */
     @PostMapping({"/formProcess/{action}"})
-    public ModelAndView postFormProcess(@PathVariable("action") String action, @ModelAttribute(MODEL_NAME) StudentPageData studentPD) {
+    public ModelAndView postFormProcess(@PathVariable("action") String action, @ModelAttribute(MODEL_NAME) StudentPageData studentPD,Principal principal) {
         switch (action) {
             case "setBudget":
                 studentEngine.budget(studentPD, true);
@@ -84,7 +85,7 @@ public class StudentController {
                 studentEngine.office(studentPD, false);
                 break;
             case "sendData":
-                studentEngine.sendData(studentPD);
+                studentEngine.sendData(studentPD,principal.getName());
                 break;
 //            case "getArchives":
 //                //TODO

@@ -40,7 +40,7 @@ public class UserEntity {
     public UserEntity(String login, String passw) {
         this.login = login;
         this.password = passw;
-        this.role = SiteRoles.ROLE_USER;
+        this.role = SiteRoles.USER;
     }
 
     public UserEntity() {

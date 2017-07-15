@@ -114,9 +114,9 @@ public class StudentEngine {
      *
      * @param studentPD данные страницы
      */
-    public void sendData(StudentPageData studentPD) {
+    public void sendData(StudentPageData studentPD,String userLogin) {
         List st = studentService.getAllByCode(studentPD.getSelectedStudents());
-        mailSender.sendTLSMailPropFileText(fileGenerator.createFullPersonsCsvs(st));
+        mailSender.sendTLSMailPropFileText(fileGenerator.createFullPersonsCsvs(st),userLogin);
     }
 
     /**

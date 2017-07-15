@@ -7,11 +7,11 @@ public enum SiteRoles {
     /**
      * администратор
      */
-    ROLE_ADMIN("ADMIN"),
+    ADMIN("ADMIN"),
     /**
      * пользователь
      */
-    ROLE_USER("USER");
+    USER("USER");
 
     private final String role;
 
@@ -24,7 +24,7 @@ public enum SiteRoles {
      *
      * @return строка роли
      */
-    public String getRole() {
+    public String getRoleWithPrefix() {
         return "ROLE_" + this.role;
     }
 
@@ -33,7 +33,7 @@ public enum SiteRoles {
      *
      * @return строка роли
      */
-    public String getRoleNoPrefix() {
+    public String getRole() {
         return this.role;
     }
 

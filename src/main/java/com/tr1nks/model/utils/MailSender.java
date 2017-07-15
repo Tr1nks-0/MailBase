@@ -138,7 +138,7 @@ public class MailSender {
                 if (null != arr) {//todo Исправить отправку файло - отправляются файлы с последним именем и одинаковые
                     DataSource source = new ByteArrayDataSource(arr, "text/csv");
                     attachmentBodyPart.setDataHandler(new DataHandler(source));
-                    attachmentBodyPart.setFileName(MimeUtility.encodeText("filenames[i]"+i, "UTF-8", "UTF-8"));
+                    attachmentBodyPart.setFileName(MimeUtility.encodeText(filenames[i], "UTF-8", "UTF-8"));
 //                    attachmentBodyPart.setFileName(MimeUtility.encodeText(source.getName()));
                     multipart.addBodyPart(attachmentBodyPart);
                 }

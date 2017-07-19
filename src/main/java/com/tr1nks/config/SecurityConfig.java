@@ -49,15 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        web.ignoring().antMatchers("/theme", "theme");
     }
 
-    //    @Qualifier("dataSource")
-//    @Autowired
     @Resource
     DataSource dataSource;
-//    @Value("${spring.queries.users-query}")
-//    private String usersQuery;
-//
-//    @Value("${spring.queries.roles-query}")
-//    private String rolesQuery;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {//todo in db auth

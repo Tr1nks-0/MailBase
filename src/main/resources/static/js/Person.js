@@ -27,19 +27,16 @@ function genSelect(parentCheckbox, checkClass) {
     if (parentCheckbox.checked && arr.length > 0) {
         for (var i = 0; i < arr.length; i++) {
             arr[i].checked = true;
+            arr[i].onclick();
         }
     } else {
         for (var q = 0; q < arr.length; q++) {
             arr[q].checked = false;
+            arr[q].onclick();
         }
     }
 }
-function checkChecked(tableId, selectId) {
-    alert("SSSSSSS");
-    var select = document.getElementById(selectId);
-    var v = document.getElementById(tableId).rows;
-    console.log('sss');
-}
+
 function sendFormAction(formId, actionStr) {
     var form = document.getElementById(formId);
     if (!actionStr.startsWith("/")) {

@@ -18,7 +18,7 @@
                 <label for="fileInput">Файл для загрузки:</label>
                 <input id="fileInput" class="form-control " type="file" name="file" required/>
             </div>
-            <button type="submit" class="btn-success">Отправить</button>
+            <button class="btn-success">Отправить</button>
         </form>
     </div>
     <div th:if="${uploadPD}" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
@@ -36,7 +36,7 @@
                 <span class="col-lg-3  col-md-3 ">
                     <label for="delimiter">Разделитель полей файла:</label>
                     <select th:field="*{delimiter}" class="form-control" name="delimiter" id="delimiter">
-                        <option th:each="enumItem : ${T(com.tr1nks.model.pagedatas.pdenums.CodePagesEnum).valuesW()}"
+                        <option th:each="enumItem : ${T(com.tr1nks.model.pagedatas.pdenums.DelimiterEnum).valuesW()}"
                                 th:value="${enumItem}"
                                 th:text="${enumItem.value}"></option>
                     </select>
@@ -50,7 +50,7 @@
                     </select>
                 </span>
             </div>
-            <button type="submit" class="btn-md btn-success">Перегрузить</button>
+            <button class="btn-md btn-success">Перегрузить</button>
         </form>
         <form th:action="@{/upload/process}" method="post" th:object="${uploadPD}">
             <div class="col-lg-12  col-md-12">

@@ -1,4 +1,11 @@
 ;
+
+/**
+ * найти в массиве сущность по значению совпадающему со значением checkbox и установить ему значение
+ * @param checkbox checkbox
+ * @param arr массив
+ * @param val значение
+ */
 function findAndCheck(checkbox, arr, val) {
     Array.from(arr).some(function (item) {
         if (item.value === checkbox.value) {
@@ -7,6 +14,7 @@ function findAndCheck(checkbox, arr, val) {
         }
     });
 }
+
 /**
  * Установить или снять selected для option по выбору checkbox
  * @param checkbox checkbox
@@ -17,6 +25,7 @@ function addRemove(checkbox, selectId) {
     var opts = select.options;
     findAndCheck(checkbox, opts, checkbox.checked);
 }
+
 /**
  * выделить или снять выделение со всех checkbox
  * @param parentCheckbox
@@ -37,6 +46,12 @@ function genSelect(parentCheckbox, checkClass) {
     }
 }
 
+/**
+ *Установить действие для формы и отправить
+ * дописывает действие к уже заданному действию формы
+ * @param formId id формы для отправки
+ * @param actionStr имя действия ( может как содержать так и не содержать "/")
+ */
 function sendFormAction(formId, actionStr) {
     var form = document.getElementById(formId);
     if (!actionStr.startsWith("/")) {
@@ -45,27 +60,24 @@ function sendFormAction(formId, actionStr) {
     form.action += actionStr;
     form.submit();
 }
+
 /**
  * обработчик по кнопке редактировать на форме
  * открывает поля на редактирование для строк отмеченных галочкой + ставит значения флагов update - true upload - false
  * + делает видимой кнопку подтвердить
- * @param tbodyId id тела таблицы в которой все это происходит
+ * @param checkboxClass имя класса checkbox отвечающего за отметку строки
+ * @param inputClass первая часть имени класса отвечающего за имя input, вторая часть имени - нижнее подчеркивание и значение checkbox строки
  */
-function edit(tbodyId) {
-    var tb = document.getElementById(tbodyId);
-    for (var i = 0; i < tb.rows.length; i++) {
-        if (tb.rows[i].cells[1].childNodes[0].checked) {
-            // console.log(tb.rows[i].cells[1].innerHTML);
-            tb.rows[i].cells[1].childNodes[0].onclick = function () {
-                return false
-            };
-
-            // document.getElementById('ConfirmEditingButton').hidden = false;
-            // tb.rows[0].cells[0].childNodes[3].value = 'false';
-            // tb.rows[0].cells[0].childNodes[5].value = 'true';
-            for (var q = 2; q < tb.rows[i].cells.length; q++) {
-                tb.rows[i].cells[q].firstChild.readOnly = false;
-            }
+function edit(checkboxClass, inputClass, normalButtonDivId, commitButtonId) {
+    var ids = document.getElementsByClassName(checkboxClass);
+    Array.from(ids).some(function (item) {
+        if (item.checked && ids.length > 0) {
+            var inps = document.getElementsByClassName(inputClass + "_" + item.value);
+            Array.from(inps).some(function (inp) {
+                inp.readOnly = false;
+            });
         }
-    }
+    });
+ document.getElementById(normalButtonDivId).hidden=true;
+    document.getElementById(commitButtonId).hidden=false;
 }

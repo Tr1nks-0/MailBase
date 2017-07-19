@@ -64,7 +64,7 @@ public class StudentController {
      * @return имя представления и данные страницы с соотв. изменениями если они были
      */
     @PostMapping({"/formProcess/{action}"})
-    public ModelAndView postFormProcess(@PathVariable("action") String action, @ModelAttribute(MODEL_NAME) StudentPageData studentPD,Principal principal) {
+    public ModelAndView postFormProcess(@PathVariable("action") String action, @ModelAttribute(MODEL_NAME) StudentPageData studentPD, Principal principal) {
         switch (action) {
             case "setBudget":
                 studentEngine.budget(studentPD, true);
@@ -85,11 +85,8 @@ public class StudentController {
                 studentEngine.office(studentPD, false);
                 break;
             case "sendData":
-                studentEngine.sendData(studentPD,principal.getName());
+                studentEngine.sendData(studentPD, principal.getName());
                 break;
-//            case "getArchives":
-//                //TODO
-//                break;
             case "reload":
                 //TODO
                 break;
@@ -99,6 +96,23 @@ public class StudentController {
         return new ModelAndView(VIEW_NAME, MODEL_NAME, studentPD);
     }
 
+    /**
+     * подтвердить редактирование на странице
+     * @param studentPD
+     * @return
+     */
+    @PostMapping(path = "/commitEdit")
+    public ModelAndView commitEdit(@ModelAttribute(MODEL_NAME) StudentPageData studentPD) {
+        studentEngine.commitEdit(studentPD);
+
+        return new ModelAndView(VIEW_NAME, MODEL_NAME, studentPD);
+    }
+
+    /**
+     * получить pdf архив из данных страницы
+     * @param studentPD данные страницы
+     * @param response ответ для передачи архива
+     */
     @PostMapping(path = "/pdf")
     public void getPDFArchives(@ModelAttribute(MODEL_NAME) StudentPageData studentPD, HttpServletResponse response) {
         try (OutputStream outputStream = response.getOutputStream()) {

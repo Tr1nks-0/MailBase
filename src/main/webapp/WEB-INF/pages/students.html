@@ -15,11 +15,11 @@
             </select>
             <h3>Факультет</h3>
             <div data-toggle="collapse" data-target="#facultySelectDiv" class="selectedFilterItemsDiv col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <span>www</span>
-                <span>fff</span>
-                <span>eeeeeeeeeeeeeeeee</span>
-                <span>eeeeeeeeeeeeeeeee</span>
-                <span>eeeeeeeeeeeeeeeee</span>
+                <!--<span>www</span>-->
+                <!--<span>fff</span>-->
+                <!--<span>eeeeeeeeeeeeeeeee</span>-->
+                <!--<span>eeeeeeeeeeeeeeeee</span>-->
+                <!--<span>eeeeeeeeeeeeeeeee</span>-->
             </div>
             <div id="facultySelectDiv" class="collapse">
                 <div th:each="facultyItem : *{variantFacults}" class="form-control">
@@ -74,12 +74,12 @@
     <hr>
     <div th:if="${studentsPD.students!=null&&studentsPD.students.size()>0}" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
         <form id="studentsForm" th:action="@{/students}" method="post" th:object="${studentsPD}">
-            <input type="hidden" th:field="*{students}">
+            <!--<input type="hidden" th:field="*{students}">-->
             <input type="hidden" th:field="*{filterFacults}">
             <input type="hidden" th:field="*{filterGroups}">
             <input type="hidden" th:field="*{filterYears}">
             <input type="hidden" th:field="*{errFlg}">
-            <select id="studentSelect" multiple="multiple" th:field="*{selectedStudents}" hidden>
+            <select id="studentSelect" th:field="*{selectedStudents}" hidden>
                 <option th:each="studentItemOption : *{students}" th:value="${studentItemOption.id}"></option>
             </select>
             <table id="personViewTable">
@@ -103,17 +103,27 @@
                     <td th:class="${studentItem.errorMessage!=null} ? errorTd:td">
                         <input type="checkbox" class="tableCheckbox" th:checked="${studentItem.errorMessage!=null}" onclick="addRemove(this,'studentSelect')"
                                th:value="${studentItem.id}">
+                        <input type="hidden" th:field="*{students[__${iter.index}__].id}">
+                        <input type="hidden" th:field="*{students[__${iter.index}__].group}">
                     </td>
-                    <td th:text="${studentItem.surname}">
-                    <!--<td>-->
-                        <!--<input type="text" th:value="${studentItem.surname}" th:field="${studentsPD.students[studentItem.id].surname}">-->
-                        <!--<input readonly type="text" class="form-control" th:field="*{students[__${studentItem.id}__].surname}" th:text="${studentItem.surname}">-->
+                    <td>
+                        <input readonly th:class="'editingInput_'+${studentItem.id}+' '+'form-control'" th:field="*{students[__${iter.index}__].surname}">
                     </td>
-                    <td th:text="${studentItem.name}"></td>
-                    <td th:text="${studentItem.patronymic}"></td>
-                    <td th:text="${studentItem.group.chiper}"></td>
-                    <td th:text="${studentItem.code}"></td>
-                    <td th:text="${studentItem.login}"></td>
+                    <td>
+                        <input readonly th:class="'editingInput_'+${studentItem.id}+' '+'form-control'" th:field="*{students[__${iter.index}__].name}">
+                    </td>
+                    <td>
+                        <input readonly th:class="'editingInput_'+${studentItem.id}+' '+'form-control'" th:field="*{students[__${iter.index}__].patronymic}">
+                    </td>
+                    <td>
+                        <input readonly th:class="'editingInput_'+${studentItem.id}+' '+'form-control'" th:field="*{students[__${iter.index}__].group.chiper}">
+                    </td>
+                    <td>
+                        <input readonly th:class="'editingInput_'+${studentItem.id}+' '+'form-control'" th:field="*{students[__${iter.index}__].code}">
+                    </td>
+                    <td>
+                        <input readonly th:class="'editingInput_'+${studentItem.id}+' '+'form-control'" th:field="*{students[__${iter.index}__].login}">
+                    </td>
                     <td th:text="${studentItem.budget}"></td>
                     <td th:text="${studentItem.imagine}"></td>
                     <td th:text="${studentItem.office}"></td>
@@ -121,29 +131,50 @@
                 </tr>
                 </tbody>
             </table>
-            <div th:if="${studentsPD.errFlg}" class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">
-                <button type="button" onclick="edit('studentTbody')" class="btn-primary col-lg-6 col-md-6 col-sm-6 col-xs-6">Редактировать</button>
-                <button type="button" onclick="sendFormAction('studentsForm','formProcess/reload')" class="btn-primary col-lg-6 col-md-6 col-sm-6 col-xs-6">Повторить</button>
+            <div id="errorButtonDivId" th:if="${studentsPD.errFlg}"
+                 class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">
+                <button type="button" onclick="edit('tableCheckbox','editingInput','errorButtonDivId','commitButtonId')" class="btn-primary col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    Редактировать
+                </button>
+                <!--<button type="button" onclick="sendFormAction('studentsForm','formProcess/reload')" class="btn-primary col-lg-6 col-md-6 col-sm-6 col-xs-6">Повторить</button>-->
             </div>
-            <div th:unless="${studentsPD.errFlg}" class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">
+            <div id="normalButtonDivId" th:unless="${studentsPD.errFlg}"
+                 class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">
                 <div>
-                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/setBudget')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Установить Бюджет</button>
+                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/setBudget')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Установить
+                        Бюджет
+                    </button>
                     <button type="button" onclick="sendFormAction('studentsForm','formProcess/setImagine')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Установить
                         Imagine
                     </button>
-                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/setOffice')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Установить Office</button>
+                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/setOffice')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Установить
+                        Office
+                    </button>
                 </div>
                 <div>
-                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/removeBudget')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Снять Бюджет</button>
-                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/removeImagine')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Снять Imagine</button>
-                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/removeOffice')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Снять Office</button>
+                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/removeBudget')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Снять
+                        Бюджет
+                    </button>
+                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/removeImagine')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Снять
+                        Imagine
+                    </button>
+                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/removeOffice')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Снять
+                        Office
+                    </button>
                 </div>
                 <div>
-                    <button type="button" onclick="edit('studentTbody')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Редактировать</button>
-                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/sendData')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Отправить данные</button>
+                    <button type="button" onclick="edit('tableCheckbox','editingInput','normalButtonDivId','commitButtonId')"
+                            class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Редактировать
+                    </button>
+                    <button type="button" onclick="sendFormAction('studentsForm','formProcess/sendData')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Отправить
+                        данные
+                    </button>
                     <button type="button" onclick="sendFormAction('studentsForm','pdf')" class="btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-4">Получить архивы</button>
                 </div>
             </div>
+            <button hidden type="button" id="commitButtonId" onclick="sendFormAction('studentsForm','commitEdit')"
+                    class="btn-primary col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">Подтвердить
+            </button>
         </form>
     </div>
 </div>

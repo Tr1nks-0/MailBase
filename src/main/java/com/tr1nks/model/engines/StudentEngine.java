@@ -114,9 +114,9 @@ public class StudentEngine {
      *
      * @param studentPD данные страницы
      */
-    public void sendData(StudentPageData studentPD,String userLogin) {
+    public void sendData(StudentPageData studentPD, String userLogin) {
         List st = studentService.getAllByCode(studentPD.getSelectedStudents());
-        mailSender.sendTLSMailPropFileText(fileGenerator.createFullPersonsCsvs(st),userLogin);
+        mailSender.sendTLSMailPropFileText(fileGenerator.createFullPersonsCsvs(st), userLogin);
     }
 
     /**
@@ -128,5 +128,12 @@ public class StudentEngine {
     public byte[] createPDFArchive(StudentPageData studentPD) {
         List st = studentService.getAllByCode(studentPD.getSelectedStudents());
         return fileGenerator.createPDFArchiveBytes(st);
+    }
+
+    public void commitEdit(StudentPageData studentPD) {
+        studentPD.getStudents().stream().filter(student -> studentPD.getSelectedStudents().contains(student.getId())).forEach(student -> {
+            studentService.editStudent(student);
+        });
+        fillFilterData(studentPD);
     }
 }

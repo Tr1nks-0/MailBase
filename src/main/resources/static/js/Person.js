@@ -67,6 +67,8 @@ function sendFormAction(formId, actionStr) {
  * + делает видимой кнопку подтвердить
  * @param checkboxClass имя класса checkbox отвечающего за отметку строки
  * @param inputClass первая часть имени класса отвечающего за имя input, вторая часть имени - нижнее подчеркивание и значение checkbox строки
+ * @param normalButtonDivId id
+ * @param commitButtonId id
  */
 function edit(checkboxClass, inputClass, normalButtonDivId, commitButtonId) {
     var ids = document.getElementsByClassName(checkboxClass);

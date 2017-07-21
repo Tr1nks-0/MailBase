@@ -19,12 +19,40 @@ function findAndCheck(checkbox, arr, val) {
  * Установить или снять selected для option по выбору checkbox
  * @param checkbox checkbox
  * @param selectId id Select
+ * @param filterDivId id div with view of div with selected vars
  */
-function addRemove(checkbox, selectId) {
+function addRemove(checkbox, selectId, filterDivId) {
     var select = document.getElementById(selectId);
     var opts = select.options;
     findAndCheck(checkbox, opts, checkbox.checked);
+    var filterDiv = document.getElementById(filterDivId);
+    var id = checkbox.id + "_filteredDiv_" + checkbox.value;
+    if (checkbox.checked && document.getElementById(id) === null) {
+        // addSpan(filterDiv, id, checkbox.labels[0].innerText);
+        var s = document.createElement('span');
+        s.textContent = checkbox.labels[0].innerText;
+        s.id = id;
+        filterDiv.appendChild(s);
+    } else if (!checkbox.checked && document.getElementById(id) !== null) {
+        // removeSpan(id);
+        document.getElementById(id).remove();
+    }
 }
+
+// function addSpan(div, spanId, text) {
+//     if (document.getElementById(spanId) === null) {
+//         var s = document.createElement('span');
+//         s.textContent = text;
+//         s.id = spanId;
+//         div.appendChild(s);
+//     }
+// }
+//
+// function removeSpan(id) {
+//     if (document.getElementById(id) !== null) {
+//         document.getElementById(id).remove();
+//     }
+// }
 
 /**
  * выделить или снять выделение со всех checkbox
@@ -80,6 +108,6 @@ function edit(checkboxClass, inputClass, normalButtonDivId, commitButtonId) {
             });
         }
     });
- document.getElementById(normalButtonDivId).hidden=true;
-    document.getElementById(commitButtonId).hidden=false;
+    document.getElementById(normalButtonDivId).hidden = true;
+    document.getElementById(commitButtonId).hidden = false;
 }

@@ -39,7 +39,7 @@ public class MainEngine {
 
     private static final FacultyEntity[] faculties = {
             new FacultyEntity(1, "Консалтинга и международного бизнеса", "КИМБ"),
-            new FacultyEntity(3, "Финансовый", "ФФ"),
+            new FacultyEntity(2, "Финансовый", "ФФ"),
             new FacultyEntity(3, "Менеджмента и маркетинга", "МИМ"),
             new FacultyEntity(4, "Экономической Информатики", "ЭИ"),
             new FacultyEntity(5, "Экономики и права", "ЭП"),

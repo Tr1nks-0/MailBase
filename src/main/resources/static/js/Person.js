@@ -28,31 +28,14 @@ function addRemove(checkbox, selectId, filterDivId) {
     var filterDiv = document.getElementById(filterDivId);
     var id = checkbox.id + "_filteredDiv_" + checkbox.value;
     if (checkbox.checked && document.getElementById(id) === null) {
-        // addSpan(filterDiv, id, checkbox.labels[0].innerText);
         var s = document.createElement('span');
         s.textContent = checkbox.labels[0].innerText;
         s.id = id;
         filterDiv.appendChild(s);
     } else if (!checkbox.checked && document.getElementById(id) !== null) {
-        // removeSpan(id);
         document.getElementById(id).remove();
     }
 }
-
-// function addSpan(div, spanId, text) {
-//     if (document.getElementById(spanId) === null) {
-//         var s = document.createElement('span');
-//         s.textContent = text;
-//         s.id = spanId;
-//         div.appendChild(s);
-//     }
-// }
-//
-// function removeSpan(id) {
-//     if (document.getElementById(id) !== null) {
-//         document.getElementById(id).remove();
-//     }
-// }
 
 /**
  * выделить или снять выделение со всех checkbox

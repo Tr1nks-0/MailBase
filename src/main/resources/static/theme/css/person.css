@@ -1,18 +1,3 @@
-/*.filterDiv {*/
-/*display: inline-block;*/
-/*border: 1px solid;*/
-/*padding-left: 1%;*/
-/*padding-right: 1%;*/
-/*}*/
-
-/*.filterDiv > div {*/
-/*display: inline-block;*/
-/*}*/
-
-/*.filterDiv > div * {*/
-/*display: block;*/
-/*}*/
-
 .filterMoveButtonsDiv button, label {
     display: block;
 }

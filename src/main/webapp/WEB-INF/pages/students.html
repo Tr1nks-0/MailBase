@@ -9,58 +9,61 @@
 <div id="center">
     <link rel="stylesheet" href="/theme/css/person.css">
     <form th:action="@{/students/filter}" method="post" th:object="${studentsPD}" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-            <label for="filterFacultsSelectId"></label>
-            <select id="filterFacultsSelectId" th:field="*{filterFacults}" hidden>
-                <option th:each="facultyItemO : *{variantFacults}" th:value="${facultyItemO.id}"></option>
-            </select>
-            <h3>Факультет</h3>
-            <div data-toggle="collapse" data-target="#facultySelectDiv" class="selectedFilterItemsDiv col-lg-12 col-md-12 col-sm-12 col-xs-12" id="facultySelectedVariantsDivId">
+        <button class="btn btn-success center-block">Применить Фильтр</button>
+        <div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <label for="filterFacultsSelectId"></label>
+                <select id="filterFacultsSelectId" th:field="*{filterFacults}" hidden>
+                    <option th:each="facultyItemO : *{variantFacults}" th:value="${facultyItemO.id}"></option>
+                </select>
+                <h3>Факультет</h3>
+                <div data-toggle="collapse" data-target="#facultySelectDiv" class="selectedFilterItemsDiv col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                     id="facultySelectedVariantsDivId">
+                </div>
+                <div id="facultySelectDiv" class="collapse col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div th:each="facultyItem : *{variantFacults}" class="form-control">
+                        <label>
+                            <input class="checkbox-inline" type="checkbox" onclick="addRemove(this,'filterFacultsSelectId','facultySelectedVariantsDivId')"
+                                   th:value="${facultyItem.id}" th:text="${facultyItem.name}" th:id="facultyCheckbox+${facultyItem.id}">
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div id="facultySelectDiv" class="collapse">
-                <div th:each="facultyItem : *{variantFacults}" class="form-control">
-                    <label th:for="facultyCheckbox+${facultyItem.id}">
-                        <input class="checkbox-inline" type="checkbox" onclick="addRemove(this,'filterFacultsSelectId','facultySelectedVariantsDivId')"
-                               th:value="${facultyItem.id}" th:text="${facultyItem.name}" th:id="facultyCheckbox+${facultyItem.id}">
-                    </label>
+            <div class="filterDiv col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <label for="filterGroupsSelectId"></label>
+                <select id="filterGroupsSelectId" th:field="*{filterGroups}" hidden>
+                    <option th:each="groupItemO : *{variantGroups}" th:value="${groupItemO.id}"></option>
+                </select>
+                <h3>Группа</h3>
+                <div data-toggle="collapse" data-target="#groupSelectDiv" class="selectedFilterItemsDiv col-lg-12 col-md-12 col-sm-12 col-xs-12" id="groupSelectedVariantsDivId">
+                </div>
+                <div id="groupSelectDiv" class="collapse col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div th:each="groupItem : *{variantGroups}" class="form-control">
+                        <label>
+                            <input class="checkbox-inline" type="checkbox" onclick="addRemove(this,'filterGroupsSelectId','groupSelectedVariantsDivId')"
+                                   th:value="${groupItem.id}" th:text="${groupItem.chiper}">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="filterDiv col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <label for="filterYearsSelectId"></label>
+                <select id="filterYearsSelectId" th:field="*{filterYears}" hidden>
+                    <option th:each="yearItemO : *{variantYears}" th:value="${yearItemO}"></option>
+                </select>
+                <h3>Год поступления</h3>
+                <div data-toggle="collapse" data-target="#yearSelectDiv" class="selectedFilterItemsDiv col-lg-12 col-md-12 col-sm-12 col-xs-12" id="yearSelectedVariantsDivId">
+                </div>
+                <div id="yearSelectDiv" class="collapse col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div th:each="yearItem : *{variantYears}" class="form-control">
+                        <label>
+                            <input class="checkbox-inline" type="checkbox" onclick="addRemove(this,'filterYearsSelectId','yearSelectedVariantsDivId')"
+                                   th:value="${yearItem}" th:text="${yearItem}">
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="filterDiv col-lg-4 col-md-4 col-sm-4 col-xs-4">
-            <label for="filterGroupsSelectId"></label>
-            <select id="filterGroupsSelectId" th:field="*{filterGroups}" hidden>
-                <option th:each="groupItemO : *{variantGroups}" th:value="${groupItemO.id}"></option>
-            </select>
-            <h3>Группа</h3>
-            <div data-toggle="collapse" data-target="#groupSelectDiv" class="selectedFilterItemsDiv col-lg-12 col-md-12 col-sm-12 col-xs-12" id="groupSelectedVariantsDivId">
-            </div>
-            <div id="groupSelectDiv" class="collapse">
-                <div th:each="groupItem : *{variantGroups}" class="form-control">
-                    <label>
-                        <input class="checkbox-inline" type="checkbox" onclick="addRemove(this,'filterGroupsSelectId','groupSelectedVariantsDivId')"
-                               th:value="${groupItem.id}" th:text="${groupItem.chiper}">
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="filterDiv col-lg-4 col-md-4 col-sm-4 col-xs-4">
-            <label for="filterYearsSelectId"></label>
-            <select id="filterYearsSelectId" th:field="*{filterYears}" hidden>
-                <option th:each="yearItemO : *{variantYears}" th:value="${yearItemO}"></option>
-            </select>
-            <h3>Год поступления</h3>
-            <div data-toggle="collapse" data-target="#yearSelectDiv" class="selectedFilterItemsDiv col-lg-12 col-md-12 col-sm-12 col-xs-12" id="yearSelectedVariantsDivId">
-            </div>
-            <div id="yearSelectDiv" class="collapse">
-                <div th:each="yearItem : *{variantYears}" class="form-control">
-                    <label>
-                        <input class="checkbox-inline" type="checkbox" onclick="addRemove(this,'filterYearsSelectId','yearSelectedVariantsDivId')"
-                               th:value="${yearItem}" th:text="${yearItem}">
-                    </label>
-                </div>
-            </div>
-        </div>
-        <button class="btn-success">Фильтр</button>
     </form>
     <script src="/js/Person.js"></script>
     <script th:replace="/includes/service/jsIncludes :: jquery"></script>
@@ -167,7 +170,7 @@
                 </div>
             </div>
             <button hidden type="button" id="commitButtonId" onclick="sendFormAction('studentsForm','commitEdit')"
-                    class="btn-primary col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">Подтвердить
+                    class=" btn-primary col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">Подтвердить
             </button>
         </form>
     </div>

@@ -37,7 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/upload/**").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
                 .antMatchers("/students/**").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
                 .antMatchers("/teachers/**").access(HAS_ANY_ROLE + SiteRoles.ADMIN.getRoleWithPrefix() + COMMA + SiteRoles.USER.getRoleWithPrefix() + TAIL)
-//                .antMatchers("/index").permitAll()
+                .antMatchers("/emailToOutController/**").permitAll()
+                .antMatchers("/EmailToOutController/**").permitAll()//backward capability
                 .and().formLogin().loginPage("/index").defaultSuccessUrl("/main", false).failureUrl("/index?error=true")
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/index")
                 .and().csrf().disable();

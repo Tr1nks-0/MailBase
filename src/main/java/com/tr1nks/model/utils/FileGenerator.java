@@ -29,11 +29,12 @@ public class FileGenerator {
 
     @Resource
     private DomensService domensService;
-    private PdfFromHtmlCreator creator = new PdfFromHtmlCreator();
-    private HtmlCssForPdfData pdfDataFull = creator.loadHtmlCssData("pdfSample_Full.html");
-    private HtmlCssForPdfData pdfDataImagine = creator.loadHtmlCssData("pdfSample_Imagine.html");
-    private HtmlCssForPdfData pdfDataOffice = creator.loadHtmlCssData("pdfSample_Office.html");
-    private HtmlCssForPdfData pdfDataEmailOnly = creator.loadHtmlCssData("pdfSample_EmailOnly.html");
+    @Resource
+    private PdfFromHtmlCreator pdfFromHtmlCreator;
+    private static HtmlCssForPdfData pdfDataFull;
+    private static HtmlCssForPdfData pdfDataImagine;
+    private static HtmlCssForPdfData pdfDataOffice;
+    private static HtmlCssForPdfData pdfDataEmailOnly;
 
     /**
      * Создать архив с pdf и csv в со структурой директорий
@@ -188,14 +189,26 @@ public class FileGenerator {
         replaceMap.put(PDF_EMAIL_ADRESS_PATTERN, person.getLogin() + domensService.getEmailDomen());
         replaceMap.put(PDF_EMAIL_PASSWORD_PATTERN, person.getInitPassw());
         if (person.getImagine() && person.getOffice()) {
-            return creator.create(pdfDataFull, replaceMap);
+            if (null == pdfDataFull) {
+                pdfDataFull = pdfFromHtmlCreator.loadHtmlCssData("pdfSample_Full.html");
+            }
+            return pdfFromHtmlCreator.create(pdfDataFull, replaceMap);
         } else {
             if (person.getImagine()) {
-                return creator.create(pdfDataImagine, replaceMap);
+                if (null == pdfDataImagine) {
+                    pdfDataImagine = pdfFromHtmlCreator.loadHtmlCssData("pdfSample_Imagine.html");
+                }
+                return pdfFromHtmlCreator.create(pdfDataImagine, replaceMap);
             } else if (person.getOffice()) {
-                return creator.create(pdfDataOffice, replaceMap);
+                if (null == pdfDataOffice) {
+                    pdfDataOffice = pdfFromHtmlCreator.loadHtmlCssData("pdfSample_Office.html");
+                }
+                return pdfFromHtmlCreator.create(pdfDataOffice, replaceMap);
             } else {
-                return creator.create(pdfDataEmailOnly, replaceMap);
+                if (null == pdfDataEmailOnly) {
+                    pdfDataEmailOnly = pdfFromHtmlCreator.loadHtmlCssData("pdfSample_EmailOnly.html");
+                }
+                return pdfFromHtmlCreator.create(pdfDataEmailOnly, replaceMap);
             }
         }
     }

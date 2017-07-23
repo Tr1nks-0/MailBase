@@ -1,5 +1,6 @@
 package com.tr1nks.model.repositories;
 
+import com.tr1nks.model.entities.GroupEntity;
 import com.tr1nks.model.entities.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,6 +28,7 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Integer>
 
     @Query(value = "SELECT *  FROM student s WHERE s.group_id = :grp", nativeQuery = true)
     List<StudentEntity> getAllByGroupId(@Param("grp") Integer group);
+//    List<StudentEntity> getAllByGroup
 
     @Query(value = "SELECT * FROM student s WHERE s.group_id = (SELECT g.id FROM group_ g WHERE g.faculty_id= :facultyId)", nativeQuery = true)
     List<StudentEntity> getAllByFacultyId(@Param("facultyId") Integer facultyId);
@@ -34,6 +36,8 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Integer>
     @Query(value = "SELECT * FROM student s WHERE s.group_id = (SELECT g.id FROM group_ g WHERE g.year= :yr)", nativeQuery = true)
     List<StudentEntity> getAllByYear(@Param("yr") Integer year);
 
-//    List<StudentEntity> findAllById(List<Integer> id);
+    //    List<StudentEntity> findAllById(List<Integer> id);
     List<StudentEntity> findAllByIdIn(List<Integer> id);
+
+    StudentEntity getBySurnameAndNameAndGroup(String surname, String name, GroupEntity group);
 }

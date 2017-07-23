@@ -39,8 +39,8 @@ public class UploadEngine {
     @Resource
     private LoginPasswordUtil loginPasswordUtil;
 
-    private static Pattern patternInner = Pattern.compile("^0");
-    private static Pattern patternOuter = Pattern.compile("\\.0");
+    private static final Pattern patternInnerGroupChiper = Pattern.compile("^0");
+    private static final Pattern patternOuterGroupChiper = Pattern.compile("\\.0");
 
     /**
      * пере-заполнить с учетом даных фильтров
@@ -101,7 +101,7 @@ public class UploadEngine {
                 continue;
             }
             String[] arr = parseArrOnMask(buf.split(delimiter), mask);
-            arr[4] = patternOuter.matcher((patternInner.matcher(arr[4]).replaceAll(""))).replaceAll(".");
+            arr[4] = patternOuterGroupChiper.matcher((patternInnerGroupChiper.matcher(arr[4]).replaceAll(""))).replaceAll(".");
             GroupEntity groupEntity = groupService.getByCipher(arr[4]);
             if (null == groupEntity) {
                 String[] ga = arr[4].split("\\.");
@@ -173,6 +173,7 @@ public class UploadEngine {
 
     /**
      * загрузить файл
+     *
      * @param file файл
      * @return данные страницы загрузки на сервер с предпросмотром по фильтрам по умолчанию
      */

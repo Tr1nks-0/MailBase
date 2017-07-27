@@ -14,6 +14,7 @@
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <label for="filterFacultsSelectId"></label>
                 <select id="filterFacultsSelectId" th:field="*{filterFacults}" hidden>
+                    <option  selected value=""></option>
                     <option th:each="facultyItemO : *{variantFacults}" th:value="${facultyItemO.id}"></option>
                 </select>
                 <h3>Факультет</h3>
@@ -32,6 +33,7 @@
             <div class="filterDiv col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <label for="filterGroupsSelectId"></label>
                 <select id="filterGroupsSelectId" th:field="*{filterGroups}" hidden>
+                    <option selected value=""></option>
                     <option th:each="groupItemO : *{variantGroups}" th:value="${groupItemO.id}"></option>
                 </select>
                 <h3>Группа</h3>
@@ -49,6 +51,7 @@
             <div class="filterDiv col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <label for="filterYearsSelectId"></label>
                 <select id="filterYearsSelectId" th:field="*{filterYears}" hidden>
+                    <option selected value=""></option>
                     <option th:each="yearItemO : *{variantYears}" th:value="${yearItemO}"></option>
                 </select>
                 <h3>Год поступления</h3>

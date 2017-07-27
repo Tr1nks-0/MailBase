@@ -68,13 +68,13 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs "src/main/resources", "src/main/webapp"
-        }
-    }
-}
+//sourceSets {
+//    main {
+//        resources {
+//            srcDirs "src/main/resources", "src/main/webapp"
+//        }
+//    }
+//}
 //jar {
 //    from ("${projectDir}/src/main/webapp/WEB-INF") {
 //        include('pages/**')

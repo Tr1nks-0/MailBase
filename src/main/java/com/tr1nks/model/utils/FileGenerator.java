@@ -59,13 +59,13 @@ public class FileGenerator {
                 builder.append(person.getSurname()).append("_").append(person.getName()).append(".pdf");
                 System.out.println(builder.toString());
                 zipOutputStream.putNextEntry(new ZipEntry(builder.toString()));
-                HashMap<Pattern, String> replaceMap = new HashMap<>();
                 zipOutputStream.write(createPdfBytes(person));
                 zipOutputStream.closeEntry();
                 builder.replace(0, builder.length(), "");
             }
             writeCsvToArchive(persons, zipOutputStream);
             zipOutputStream.flush();
+            zipOutputStream.close();
             arr = byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
@@ -97,9 +97,12 @@ public class FileGenerator {
             }
         }
         for (String name : map.keySet()) {
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(zipOutputStream, "cp1251"))) {
+//            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(zipOutputStream, "cp1251"))) {
+            try  {
                 zipOutputStream.putNextEntry(new ZipEntry(name));
                 zipOutputStream.write(map.get(name).toString().getBytes("cp1251"));
+//                writer.write(map.get(name).toString());
+                System.out.println(name);
                 zipOutputStream.closeEntry();
             } catch (IOException e) {
                 e.printStackTrace();

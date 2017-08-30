@@ -25,7 +25,7 @@ public class DomensServiceImpl implements DomensService {
     @Override
     public String getEmailDomen() {
         if (null == emailDomen) {
-            emailDomen = domensRepository.findFirstById(1).getEmailDomen();
+            emailDomen = domensRepository.getFirstById(1).getEmailDomen();
         }
         return emailDomen;
     }
@@ -38,7 +38,7 @@ public class DomensServiceImpl implements DomensService {
     @Override
     public String getImagineDomen() {
         if (null == imagineDomen) {
-            imagineDomen = domensRepository.findFirstById(1).getImagineDomen();
+            imagineDomen = domensRepository.getFirstById(1).getImagineDomen();
         }
         return imagineDomen;
     }
@@ -51,7 +51,7 @@ public class DomensServiceImpl implements DomensService {
     @Override
     public String getOfficeDomen() {
         if (null == officeDomen) {
-            officeDomen = domensRepository.findFirstById(1).getOfficeDomen();
+            officeDomen = domensRepository.getFirstById(1).getOfficeDomen();
         }
         return officeDomen;
     }

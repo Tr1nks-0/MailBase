@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DomenRepository extends JpaRepository<DomensEntity, Integer> {
-    DomensEntity findFirstById(Integer id);
+    DomensEntity getFirstById(Integer id);
 
 }

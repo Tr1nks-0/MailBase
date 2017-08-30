@@ -16,7 +16,18 @@ function findAndCheck(checkbox, arr, val) {
 }
 
 /**
- * Установить или снять selected для option по выбору checkbox
+ * Установить или снять selected для option по выбору checkbox без создания span
+ * @param checkbox checkbox
+ * @param selectId id Select
+ */
+function addRemoveNoAdd(checkbox, selectId) {
+    var select = document.getElementById(selectId);
+    var opts = select.options;
+    findAndCheck(checkbox, opts, checkbox.checked);
+}
+    /**
+     }
+ * Установить или снять selected для option по выбору checkbox с созданием span
  * @param checkbox checkbox
  * @param selectId id Select
  * @param filterDivId id div with view of div with selected vars

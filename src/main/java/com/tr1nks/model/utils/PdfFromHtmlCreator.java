@@ -31,7 +31,7 @@ public class PdfFromHtmlCreator {
     public HtmlCssForPdfData loadHtmlCssData(String filename) {
         String html = loadText(filename);
         List<CssFile> css = new ArrayList<>();
-        System.out.println("HTML is nill=" + (html==null));
+        System.out.println("HTML is null=" + (html==null));
         System.out.println("CSS FILENAMES=" + getCssFileNames(html));
         for (String str : loadText(getCssFileNames(html))) {
             css.add(XMLWorkerHelper.getCSS(new ByteArrayInputStream(str.getBytes())));
@@ -106,7 +106,7 @@ public class PdfFromHtmlCreator {
 
     private String loadText(String filename) {
         StringBuilder builder = new StringBuilder();
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(FileGenerator.PDF_RESOURCE_LOCATION + filename)))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(FileGenerator.PDF_RESOURCE_LOCATION + filename),"utf-8"))) {
             String buffer;
             while ((buffer = bufferedReader.readLine()) != null) {
                 builder.append(buffer);

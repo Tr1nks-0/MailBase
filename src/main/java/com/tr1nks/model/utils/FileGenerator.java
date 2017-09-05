@@ -194,22 +194,26 @@ public class FileGenerator {
         if (person.getImagine() && person.getOffice()) {
             if (null == pdfDataFull) {
                 pdfDataFull = pdfFromHtmlCreator.loadHtmlCssData("pdfSample_Full.html");
+                System.out.println(pdfDataFull.getHtml());
             }
             return pdfFromHtmlCreator.create(pdfDataFull, replaceMap);
         } else {
             if (person.getImagine()) {
                 if (null == pdfDataImagine) {
                     pdfDataImagine = pdfFromHtmlCreator.loadHtmlCssData("pdfSample_Imagine.html");
+                    System.out.println(pdfDataImagine.getHtml());
                 }
                 return pdfFromHtmlCreator.create(pdfDataImagine, replaceMap);
             } else if (person.getOffice()) {
                 if (null == pdfDataOffice) {
                     pdfDataOffice = pdfFromHtmlCreator.loadHtmlCssData("pdfSample_Office.html");
+                    System.out.println(pdfDataOffice.getHtml());
                 }
                 return pdfFromHtmlCreator.create(pdfDataOffice, replaceMap);
             } else {
                 if (null == pdfDataEmailOnly) {
                     pdfDataEmailOnly = pdfFromHtmlCreator.loadHtmlCssData("pdfSample_EmailOnly.html");
+                    System.out.println(pdfDataEmailOnly.getHtml());
                 }
                 return pdfFromHtmlCreator.create(pdfDataEmailOnly, replaceMap);
             }
